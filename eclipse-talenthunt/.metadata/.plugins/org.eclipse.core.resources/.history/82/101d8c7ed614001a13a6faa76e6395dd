@@ -1,0 +1,5 @@
+package com.tyss.talenthunt.config;
+
+public class OrmConfiguration {
+
+}

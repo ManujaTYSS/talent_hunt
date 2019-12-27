@@ -1,0 +1,60 @@
+package com.tyss.talenthunt.service;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.tyss.talenthunt.dao.AddRequirmentDAO;
+import com.tyss.talenthunt.dto.RequirmentBean;
+import com.tyss.talenthunt.dto.CandidateCreation;
+import com.tyss.talenthunt.dto.ScheduleInterviewBean;
+
+@Service
+public class AddRequirmentServiceImpl implements AddRequirmentServiceInterface {
+	@Autowired
+	private AddRequirmentDAO dao;
+
+	@Override
+	public RequirmentBean addrequirement(RequirmentBean reqinfo) {
+		if (reqinfo.getInterview() != null) {
+			for (ScheduleInterviewBean bean : reqinfo.getInterview()) {
+				bean.setRequirment(reqinfo);
+			}
+		}
+		return dao.addrequirement(reqinfo);
+	}
+
+	@Override
+	public boolean updateRequirment(RequirmentBean reqinfo) {
+		return dao.updateRequirment(reqinfo);
+	}
+
+	@Override
+	public List<RequirmentBean> getAllRequirements() {
+		return dao.getAllRequirements();
+	}
+
+	@Override
+	public CandidateCreation addCandidate(CandidateCreation candidateInfo) {
+		return dao.addCandidate(candidateInfo);
+	}
+
+	@Override
+	public List<CandidateCreation> getAllCandidate() {
+		return dao.getCandidate();
+	}
+
+	@Override
+	public ScheduleInterviewBean addInterview(ScheduleInterviewBean interview) {
+//		interview.getRequirment().setInterview(Arrays.asList(interview));
+		return dao.addInterview(interview);
+	}
+
+	@Override
+	public List<ScheduleInterviewBean> getAllInterview() {
+		return dao.getAllInterview();
+	}
+
+}

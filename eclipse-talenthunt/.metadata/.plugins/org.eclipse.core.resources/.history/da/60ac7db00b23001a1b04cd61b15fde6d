@@ -1,0 +1,139 @@
+package com.tyss.talenthunt.dao;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.Query;
+
+import org.springframework.stereotype.Repository;
+
+import com.tyss.talenthunt.dto.AddRequirment;
+import com.tyss.talenthunt.dto.CandidateCreation;
+import com.tyss.talenthunt.dto.ScheduleInterviewBean;
+
+@Repository
+public class AddRequirmentDAOImpl implements AddRequirmentDAO {
+
+	@PersistenceUnit
+	private EntityManagerFactory factory;
+
+	@Override
+	public AddRequirment addrequirement(AddRequirment reqinfo) {
+		EntityManager manager = factory.createEntityManager();
+		EntityTransaction transaction = manager.getTransaction();
+	for (ScheduleInterviewBean bean : reqinfo.getInterview()) {
+		bean.setRequirment(reqinfo);
+	}
+		try {
+			transaction.begin();
+			manager.persist(reqinfo);
+			transaction.commit();
+			return reqinfo;
+		} catch (Exception e) {
+			manager.close();
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@Override
+	public boolean updateRequirment(AddRequirment reqinfo) {
+		EntityManager manager = factory.createEntityManager();
+		EntityTransaction transaction = manager.getTransaction();
+		AddRequirment updateinfo = manager.find(AddRequirment.class, reqinfo.getRequirmentId());
+		if (updateinfo == null) {
+			return false;
+		}
+		transaction.begin();
+		updateinfo.setRequirmentId(reqinfo.getRequirmentId());
+		updateinfo.setClient(reqinfo.getClient());
+		updateinfo.setTechnology(reqinfo.getTechnology());
+		updateinfo.setYoe(reqinfo.getYoe());
+		updateinfo.setLocation(reqinfo.getLocation());
+		updateinfo.setNop(reqinfo.getNop());
+		updateinfo.setOdate(reqinfo.getOdate());
+		updateinfo.setCdate(reqinfo.getCdate());
+		updateinfo.setRole(reqinfo.getRole());
+		updateinfo.setRate(reqinfo.getRate());
+		updateinfo.setContact(reqinfo.getContact());
+		updateinfo.setJd(reqinfo.getJd());
+		transaction.commit();
+		return true;
+	}
+
+	@Override
+	public List<AddRequirment> getAllRequirements() {
+		EntityManager manager = factory.createEntityManager();
+		EntityTransaction transaction = manager.getTransaction();
+		String jpql = "From AddRequirment";
+		Query query = manager.createQuery(jpql);
+		List<AddRequirment> req = (List<AddRequirment>) query.getResultList();
+		return req;
+
+	}
+
+	@Override
+	public CandidateCreation addCandidate(CandidateCreation candidateInfo) {
+		EntityManager manager = factory.createEntityManager();
+		EntityTransaction transaction = manager.getTransaction();
+		try {
+			transaction.begin();
+			manager.persist(candidateInfo);
+			transaction.commit();
+			return candidateInfo;
+		} catch (Exception e) {
+			manager.close();
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public List<CandidateCreation> getCandidate() {
+		EntityManager manager = factory.createEntityManager();
+		EntityTransaction transaction = manager.getTransaction();
+		String jpql = "From CandidateCreation";
+		Query query = manager.createQuery(jpql);
+		List<CandidateCreation> candidate = (List<CandidateCreation>) query.getResultList();
+		return candidate;
+	}
+
+	@Override
+	public ScheduleInterviewBean addInterview(ScheduleInterviewBean interview) {
+		
+		EntityManager manager = factory.createEntityManager();
+		EntityTransaction transaction = manager.getTransaction();
+		try {
+			
+			transaction.begin();
+			//to get id 
+			ScheduleInterviewBean sInterview = new ScheduleInterviewBean();
+			AddRequirment requirment1 = new AddRequirment();
+			sInterview.setRequirment(requirment1);
+			requirment1.setRequirmentId("requirmentId");
+			manager.persist(interview);
+			 transaction.commit();
+			return interview;
+		} catch (Exception e) {
+			manager.close();
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@Override
+	public List<ScheduleInterviewBean> getAllInterview() {
+		EntityManager manager = factory.createEntityManager();
+		EntityTransaction transaction = manager.getTransaction();
+		String jpql = "From ScheduleInterviewBean";
+		Query query = manager.createQuery(jpql);
+		List<ScheduleInterviewBean> interview = (List<ScheduleInterviewBean>) query.getResultList();
+		return interview;
+	}
+
+}

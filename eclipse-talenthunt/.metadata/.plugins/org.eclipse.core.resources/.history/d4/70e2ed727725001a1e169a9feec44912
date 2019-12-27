@@ -1,0 +1,23 @@
+package com.tyss.talenthunt.dao;
+
+import java.util.List;
+
+import com.tyss.talenthunt.dto.RequirmentBean;
+import com.tyss.talenthunt.dto.CandidateCreation;
+import com.tyss.talenthunt.dto.ScheduleInterviewBean;
+
+public interface AddRequirmentDAO {
+	public RequirmentBean addrequirement(RequirmentBean reqinfo);
+
+	public boolean updateRequirment(RequirmentBean reqinfo);
+	
+	public List<RequirmentBean> getAllRequirements();
+	
+	public CandidateCreation addCandidate(CandidateCreation candidateInfo);
+	
+	public List<CandidateCreation> getCandidate();
+	
+	public ScheduleInterviewBean addInterview(ScheduleInterviewBean interview);
+	
+	public List<ScheduleInterviewBean> getAllInterview();
+}
